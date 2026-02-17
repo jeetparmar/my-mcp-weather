@@ -60,10 +60,62 @@ Get weather forecast for a US location.
 ## Running the Server
 
 ```bash
-python weather.py
+uv run python weather.py
 ```
 
 The server runs on stdio transport, making it compatible with MCP clients using local stdio pipes.
+
+## Integration with Claude Desktop
+
+To use this weather server with Claude Desktop, add the following configuration to your `claude_desktop_config.json` file (located at `~/.config/Claude/claude_desktop_config.json` on Linux/Mac or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
+
+```json
+{
+  "mcpServers": {
+    "weather": {
+      "command": "/Users/computer-name/.local/bin/uv",
+      // find it above path using which uv
+      "args": [
+        "--directory",
+        "/Users/path-to-project/my-mcp-weather",
+        // find it this too using "pwd"
+        "run",
+        "weather.py"
+      ]
+    }
+  }
+}
+```
+
+Replace the paths with your actual installation paths. Once configured, Claude Desktop will have access to the weather tools for getting alerts and forecasts.
+
+## Example Queries
+
+Here are some example queries you can use with Claude Desktop to interact with the weather MCP server:
+
+### Get Weather Alerts
+
+**Query:** "Using the weather tool, get current alerts for San Francisco,CA"
+
+**Query:** "Check weather alerts in New York,NY"
+
+**Query:** "Are there any weather alerts for 95128 (San Jose zip code)?"
+
+### Get Weather Forecast
+
+**Query:** "Using the weather tool, get a 5-day forecast for Los Angeles,CA"
+
+**Query:** "What's the weather forecast for Chicago,IL for the next 3 days?"
+
+**Query:** "Show me the forecast for 10001 (New York City zip code)"
+
+### Combined Requests
+
+**Query:** "Check current weather alerts for rainfall and give me a 3-day forecast for Portland,OR"
+
+**Query:** "Are there any severe weather alerts for Houston,TX? If not, show me tomorrow's forecast"
+
+These queries will trigger the weather server to fetch real-time data from the National Weather Service API and return formatted weather information directly in Claude Desktop.
 
 ## API Source
 
